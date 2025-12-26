@@ -39,4 +39,4 @@ class Assignment(models.Model):
         unique_together = ('event', 'photographer')
 
     def __str__(self):
-        return f"{self.photographer} → {self.event}"
+        return f"{self.photographer} - {self.event}"
