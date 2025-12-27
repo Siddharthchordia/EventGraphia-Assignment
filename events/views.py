@@ -3,6 +3,7 @@ from datetime import date
 from django.db import transaction
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
 from .models import Assignment, Event, Photographer
@@ -11,6 +12,14 @@ from .serializers import (
     EventSerializer,
     PhotographerSerializer,
 )
+
+
+@api_view(['GET'])
+def api_root(request):
+    return Response({
+        'events': reverse('event-list', request=request),
+        'photographers': reverse('photographer-list', request=request),
+    })
 
 
 @api_view(['GET', 'POST'])
