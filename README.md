@@ -48,6 +48,7 @@ A Django API to manage events and photographers, featuring an automated smart as
    ```bash
    cp .env.example .env
    ```
+     Edit the `.env` file as per your environment.
 
 2. **Build and Run Containers**:
    ```bash
