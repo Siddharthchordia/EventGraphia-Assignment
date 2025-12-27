@@ -1,8 +1,8 @@
 from datetime import date, timedelta
-from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Event, Photographer, Assignment
+
 
 class AssignmentTests(APITestCase):
     def setUp(self):
@@ -29,7 +29,7 @@ class AssignmentTests(APITestCase):
 
         url = f'/api/events/{event.id}/assign-photographers/'
         response = self.client.post(url)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['assigned_photographers']), 2)
         self.assertEqual(Assignment.objects.filter(event=event).count(), 2)
@@ -44,41 +44,41 @@ class AssignmentTests(APITestCase):
 
         url = f'/api/events/{event.id}/assign-photographers/'
         response = self.client.post(url)
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('Not enough available photographers', response.data['error'])
 
     def test_photographer_already_booked(self):
         future_date = date.today() + timedelta(days=15)
-        
+
         event1 = Event.objects.create(
             event_name="Event 1",
             event_date=future_date,
             photographers_required=3
         )
-        
+
         self.client.post(f'/api/events/{event1.id}/assign-photographers/')
-        
+
         event2 = Event.objects.create(
             event_name="Event 2",
             event_date=future_date,
             photographers_required=1
         )
-        
+
         response = self.client.post(f'/api/events/{event2.id}/assign-photographers/')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) # All 3 active are booked
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # All 3 active are booked
 
     def test_assignment_logic_excludes_inactive(self):
-         future_date = date.today() + timedelta(days=20)
-         event = Event.objects.create(
+        future_date = date.today() + timedelta(days=20)
+        event = Event.objects.create(
             event_name="Gala",
             event_date=future_date,
             photographers_required=4
         )
-         
-         response = self.client.post(f'/api/events/{event.id}/assign-photographers/')
-         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-         self.assertEqual(response.data['available'], 3)
+
+        response = self.client.post(f'/api/events/{event.id}/assign-photographers/')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['available'], 3)
 
     def test_past_event(self):
         past_date = date.today() - timedelta(days=1)
@@ -87,7 +87,7 @@ class AssignmentTests(APITestCase):
             event_date=past_date,
             photographers_required=1
         )
-        
+
         response = self.client.post(f'/api/events/{event.id}/assign-photographers/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('past', response.data['error'])
@@ -99,11 +99,9 @@ class AssignmentTests(APITestCase):
             event_date=future_date,
             photographers_required=1
         )
-        
 
         self.client.post(f'/api/events/{event.id}/assign-photographers/')
-        
-        
+
         response = self.client.post(f'/api/events/{event.id}/assign-photographers/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('already has assignments', response.data['error'])

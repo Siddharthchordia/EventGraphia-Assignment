@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-c6!c5wxc7*zs42g(_-01wcq2xcuvurjf(mn^a4wege5+!y35!+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 
 # Application definition
@@ -83,8 +83,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
-
-if os.getenv("USE_POSTGRES", "True") == True:
+USE_POSTGRES = os.environ.get("USE_POSTGRES", "False") == "True"
+if USE_POSTGRES:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -94,7 +94,7 @@ if os.getenv("USE_POSTGRES", "True") == True:
             "HOST": os.environ.get("POSTGRES_HOST"),
             "PORT": os.environ.get("POSTGRES_PORT"),
         }
-}
+    }
 else:
     DATABASES = {
         "default": {

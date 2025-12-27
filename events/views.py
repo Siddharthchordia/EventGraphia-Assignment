@@ -90,7 +90,7 @@ def assign_photographers(request, id):
             {'error': 'Event already has assignments'},
             status=status.HTTP_400_BAD_REQUEST,
         )
-    
+
     required_count = event.photographers_required
     active_photographers = Photographer.objects.filter(is_active=True)
 
@@ -114,7 +114,7 @@ def assign_photographers(request, id):
 
     photographers_to_assign = available_photographers[:required_count]
     assignments = []
-    
+
     with transaction.atomic():
         for photographer in photographers_to_assign:
             assignments.append(
@@ -125,7 +125,7 @@ def assign_photographers(request, id):
     assigned_photographers_serializer = PhotographerSerializer(
         photographers_to_assign, many=True
     )
-    
+
     return Response(
         {
             'message': 'Photographers assigned successfully',
@@ -201,7 +201,7 @@ def photographer_schedule(request, id):
     assignments = Assignment.objects.filter(
         photographer=photographer
     ).select_related('event')
-    
+
     events = [a.event for a in assignments]
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
