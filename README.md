@@ -12,53 +12,65 @@ A Django API to manage events and photographers, featuring an automated smart as
 
 ### Local Setup (Without Docker)
 
-1. **Create and activate virtual environment**:
+1. **Configure Environment Variables**:
+   Copy the example environment file and configure it:
+   ```bash
+   cp .env.example .env
+   ```
+   Modify `.env` if necessary (e.g., database credentials).
+
+2. **Create and activate virtual environment**:
    ```bash
    python3 -m venv venv
    source venv/bin/activate  
    # On Windows: venv\Scripts\activate
    ```
-2. **Install dependencies**:
+3. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run Migrations**:
+4. **Run Migrations**:
    ```bash
    python manage.py migrate
    ```
-4. **Create Superuser (for Admin Access)**:
+5. **Create Superuser (for Admin Access)**:
    ```bash
    python manage.py createsuperuser
    ```
-5. **Run Server**:
+6. **Run Server**:
    ```bash
    python manage.py runserver
    ```
 
 ### Docker Setup (Recommended)
 
-1. **Build and Run Containers**:
+1. **Configure Environment Variables**:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Build and Run Containers**:
    ```bash
    docker-compose up --build -d
    ```
    The API will be available at `http://localhost:8000`.
 
-2. **Run Migrations (if not verified automatically)**:
+3. **Run Migrations (if not verified automatically)**:
    ```bash
    docker-compose exec eg_backend python manage.py migrate
    ```
 
-3. **Create Superuser**:
+4. **Create Superuser**:
    ```bash
    docker-compose exec eg_backend python manage.py createsuperuser
    ```
 
-4. **Run Tests**:
+5. **Run Tests**:
    ```bash
    docker-compose exec eg_backend python manage.py test events
    ```
 
-5. **Stop Containers**:
+6. **Stop Containers**:
    ```bash
    docker-compose down
    ```
